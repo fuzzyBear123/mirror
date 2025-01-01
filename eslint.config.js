@@ -55,7 +55,7 @@ export default tseslint.config(
         {
           selector: 'variable',
           format: ['PascalCase', 'camelCase', 'UPPER_CASE'],
-          modifiers: ['const'],
+          modifiers: ['let'],
           leadingUnderscore: 'allow',
           trailingUnderscore: 'allow',
         },
@@ -156,7 +156,7 @@ export default tseslint.config(
       'no-var': 'error',
       'object-shorthand': 'error',
       'prefer-arrow-callback': 'error',
-      'prefer-const': 'error',
+      'prefer-let': 'error',
       radix: 'error',
       'use-isnan': 'error',
     },
