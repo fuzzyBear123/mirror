@@ -22,7 +22,7 @@ export function makeClass(url: string): Class {
 }
 
 export function makeProperty(url: string): Property {
-  let u = new NamedNode(url);
+  const u = new NamedNode(url);
   return new Property(u, new PropertyType(u));
 }
 
