@@ -16,12 +16,12 @@
 
 import ts from 'typescript';
 import type {TypeNode} from 'typescript';
-const {factory, SyntaxKind} = ts;
+let {factory, SyntaxKind} = ts;
 
 export function typeUnion(
   ...args: Array<TypeNode | undefined | null | false>
 ): TypeNode {
-  const types = args.filter((elem): elem is TypeNode => !!elem);
+  let types = args.filter((elem): elem is TypeNode => !!elem);
 
   switch (types.length) {
     case 0:
