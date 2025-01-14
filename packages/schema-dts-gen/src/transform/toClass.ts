@@ -37,10 +37,10 @@ import {NamedNode} from 'n3';
 import {shortStr} from '../index.js';
 
 function toClass(cls: Class, topic: TypedTopic, map: ClassMap): Class {
-  let rest: Quad[] = [];
+  const rest: Quad[] = [];
 
-  for (let value of topic.quads) {
-    let added = cls.add(value, map);
+  for (const value of topic.quads) {
+    const added = cls.add(value, map);
     if (!added) rest.push(value);
   }
 
@@ -66,7 +66,7 @@ function buildAlias(name: string, alias: string): AliasBuiltin[] {
     ),
   ];
 }
-let wellKnownTypes = [
+const wellKnownTypes = [
   ...buildAlias('Text', 'string'),
   // IMPORTANT: In the future, if possible, we should have: `${number}` in Float only,
   // an integer string literal in Integer only, and Number becomes simply Float|Integer.
@@ -97,7 +97,7 @@ let wellKnownTypes = [
 ];
 
 // Should we allow 'string' to be a valid type for all values of this type?
-let wellKnownStrings = [
+const wellKnownStrings = [
   new NamedNode('http://schema.org/Quantity'),
   new NamedNode('http://schema.org/EntryPoint'),
   new NamedNode('http://schema.org/Organization'),
@@ -111,19 +111,19 @@ let wellKnownStrings = [
 ];
 
 function ForwardDeclareClasses(topics: readonly TypedTopic[]): ClassMap {
-  let classes = new Map<string, Class>();
-  let dataType = new DataTypeUnion(
+  const classes = new Map<string, Class>();
+  const dataType = new DataTypeUnion(
     new NamedNode('http://schema.org/DataType'),
     [],
   );
 
-  for (let topic of topics) {
+  for (const topic of topics) {
     if (IsDataType(topic.subject)) {
       classes.set(topic.subject.value, dataType);
       continue;
     } else if (!IsDirectlyNamedClass(topic) && !IsSubclass(topic)) continue;
 
-    let wk = wellKnownTypes.find(wk => wk.subject.equals(topic.subject));
+    const wk = wellKnownTypes.find(wk => wk.subject.equals(topic.subject));
     if (ClassIsDataType(topic)) {
       assert(
         wk,
@@ -135,8 +135,8 @@ function ForwardDeclareClasses(topics: readonly TypedTopic[]): ClassMap {
     }
 
     assertIs(topic.subject, (s): s is NamedNode => s.termType === 'NamedNode');
-    let cls = wk || new Class(topic.subject);
-    let allowString = wellKnownStrings.some(wks => wks.equals(topic.subject));
+    const cls = wk || new Class(topic.subject);
+    const allowString = wellKnownStrings.some(wks => wks.equals(topic.subject));
     if (allowString) cls.addTypedef(AliasBuiltin.Alias('string'));
     if (IsDirectlyNamedClass(topic)) cls.markAsExplicitClass();
 
@@ -147,15 +147,15 @@ function ForwardDeclareClasses(topics: readonly TypedTopic[]): ClassMap {
 }
 
 function BuildClasses(topics: readonly TypedTopic[], classes: ClassMap) {
-  for (let topic of topics) {
+  for (const topic of topics) {
     if (!IsDirectlyNamedClass(topic) && !IsSubclass(topic)) continue;
 
-    let cls = classes.get(topic.subject.value);
+    const cls = classes.get(topic.subject.value);
     assert(cls);
     toClass(cls, topic, classes);
   }
 
-  for (let cls of classes.values()) {
+  for (const cls of classes.values()) {
     cls.validateClass();
   }
 }
@@ -169,7 +169,7 @@ function BuildClasses(topics: readonly TypedTopic[], classes: ClassMap) {
  * @returns ClassMap Mapping fully qualified ID of each type to a Class.
  */
 export function ProcessClasses(topics: readonly TypedTopic[]): ClassMap {
-  let classes = ForwardDeclareClasses(topics);
+  const classes = ForwardDeclareClasses(topics);
   BuildClasses(topics, classes);
   return classes;
 }
