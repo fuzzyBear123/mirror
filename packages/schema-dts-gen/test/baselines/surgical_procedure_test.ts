@@ -22,7 +22,7 @@ import {basename} from 'path';
 import {inlineCli} from '../helpers/main_driver.js';
 
 test(`baseline_${basename(import.meta.url)}`, async () => {
-  let {actual} = await inlineCli(
+  const {actual} = await inlineCli(
     `
 <http://schema.org/SurgicalProcedure> <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://schema.org/MedicalProcedure> .
 <http://schema.org/SurgicalProcedure> <http://www.w3.org/2000/01/rdf-schema#comment> "A medical procedure involving an incision with instruments; performed for diagnose, or therapeutic purposes." .
