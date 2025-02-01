@@ -22,7 +22,7 @@ import {basename} from 'path';
 import {inlineCli} from '../helpers/main_driver.js';
 
 test(`baseline_${basename(import.meta.url)}`, async () => {
-  let {actual} = await inlineCli(
+  const {actual} = await inlineCli(
     `
 <https://schema.org/name> <https://schema.org/rangeIncludes> <https://schema.org/Text> .
 <https://schema.org/name> <https://schema.org/domainIncludes> <https://schema.org/Thing> .
