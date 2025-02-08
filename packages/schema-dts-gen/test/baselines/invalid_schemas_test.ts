@@ -22,7 +22,7 @@ import {basename} from 'path';
 import {inlineCli} from '../helpers/main_driver.js';
 
 test(`invalidSyntax_${basename(import.meta.url)}`, async () => {
-  let run = inlineCli(
+  const run = inlineCli(
     `
  <"INVALID> <http://www.w3.org/1999/02/22-rdf-s> "X" .
        `,
@@ -33,7 +33,7 @@ test(`invalidSyntax_${basename(import.meta.url)}`, async () => {
 });
 
 test(`unnamedURLClass_${basename(import.meta.url)}`, async () => {
-  let run = inlineCli(
+  const run = inlineCli(
     `
  <http://schema.org/> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#Class> .
        `,
@@ -44,7 +44,7 @@ test(`unnamedURLClass_${basename(import.meta.url)}`, async () => {
 });
 
 test(`notMarkedAsClass_cycle_${basename(import.meta.url)}`, async () => {
-  let run = inlineCli(
+  const run = inlineCli(
     `
  <http://schema.org/name> <http://schema.org/rangeIncludes> <http://schema.org/Text> .
  <http://schema.org/name> <http://schema.org/domainIncludes> <http://schema.org/Thing> .
