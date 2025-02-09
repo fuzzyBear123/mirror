@@ -1,6 +1,6 @@
 import ts from 'typescript';
 import type {TypeNode} from 'typescript';
-const {factory, SyntaxKind, ModifierFlags} = ts;
+let {factory, SyntaxKind, ModifierFlags} = ts;
 
 import {Context} from './context.js';
 import {arrayOf} from './util/arrayof.js';
@@ -77,9 +77,9 @@ function GraphType(context: Context) {
   );
 }
 
-const SchemaValueName = 'SchemaValue';
-export const IdReferenceName = 'IdReference';
-export const GraphTypeName = 'Graph';
+let SchemaValueName = 'SchemaValue';
+export let IdReferenceName = 'IdReference';
+export let GraphTypeName = 'Graph';
 
 export function SchemaValueReference(
   {hasRole}: {hasRole: boolean},
