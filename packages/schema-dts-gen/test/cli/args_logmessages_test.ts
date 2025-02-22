@@ -21,8 +21,8 @@ import {main} from '../../src/cli/internal/main.js';
 import {SetLogger} from '../../src/logging/index.js';
 
 describe('main Args logs', () => {
-  var logs: string[];
-  var ResetLogger: undefined | (() => void) = undefined;
+  let logs: string[];
+  let ResetLogger: undefined | (() => void) = undefined;
 
   beforeEach(() => {
     const mockFileLine = `<http://schema.org/Thing> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#Class> .\n`;
