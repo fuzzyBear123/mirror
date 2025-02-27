@@ -16,7 +16,7 @@
 
 import ts from 'typescript';
 import type {PropertySignature} from 'typescript';
-let {factory} = ts;
+const {factory} = ts;
 
 import {NamedNode} from 'n3';
 import {nameFromContext} from '../triples/term_utils.js';
@@ -41,8 +41,8 @@ export class Context {
     if (this.context.length === 1) return; // One context is always right.
 
     // Make sure no key is duplicated.
-    let seen: Set<string> = new Set<string>();
-    for (let [name] of this.context) {
+    const seen: Set<string> = new Set<string>();
+    for (const [name] of this.context) {
       if (seen.has(name)) {
         throw new Error(`Named context ${name} found twice in context.`);
       }
@@ -56,8 +56,8 @@ export class Context {
   }
 
   getScopedName(node: NamedNode): string {
-    for (let [ctxName, url] of this.context) {
-      let name = nameFromContext(node, url);
+    for (const [ctxName, url] of this.context) {
+      const name = nameFromContext(node, url);
       if (name !== null) {
         // Valid possibilities:
         // - "schema:Foo"  when name == schema && node.name == Foo.
@@ -104,17 +104,17 @@ export class Context {
   }
 
   static Parse(contextSpec: string): Context {
-    let keyVals = contextSpec
+    const keyVals = contextSpec
       .split(',')
       .map(s => s.trim())
       .filter(s => !!s);
-    let context = new Context();
+    const context = new Context();
 
     if (keyVals.length === 1) {
       context.setUrlContext(keyVals[0]);
     } else {
-      for (let keyVal of keyVals) {
-        let match = /^([^:]+):((http|https):.+)$/g.exec(keyVal);
+      for (const keyVal of keyVals) {
+        const match = /^([^:]+):((http|https):.+)$/g.exec(keyVal);
         if (!match || match[1] === undefined || match[2] === undefined) {
           throw new Error(`Unknown value ${keyVal} in --context flag.`);
         }
