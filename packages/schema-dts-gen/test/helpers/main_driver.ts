@@ -31,7 +31,7 @@ export async function inlineCli(
   args: string[],
 ): Promise<{actual: string; actualLogs: string}> {
   // Restorables
-  var realGet = https.get;
+  const realGet = https.get;
   let ResetLogger: undefined | (() => void) = undefined;
 
   try {
@@ -39,7 +39,7 @@ export async function inlineCli(
     let innerOnData: (chunk: Buffer) => void;
     let innerOnEnd: () => void;
 
-    var write = (s: string) => writes.push(s);
+    const write = (s: string) => writes.push(s);
 
     ResetLogger = SetLogger((msg: string) => void logs.push(msg));
 
@@ -62,10 +62,10 @@ export async function inlineCli(
     }) as typeof https.get;
 
     // Outputs
-    var writes: string[] = [];
-    var logs: string[] = [];
+    const writes: string[] = [];
+    const logs: string[] = [];
 
-    var wholeProgram = main(write, args);
+    const wholeProgram = main(write, args);
     await flush();
 
     assert(innerOnData!);
