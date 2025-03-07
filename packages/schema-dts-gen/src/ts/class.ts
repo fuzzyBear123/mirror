@@ -22,7 +22,7 @@ import type {
   TypeParameterDeclaration,
 } from 'typescript';
 
-let {factory, ModifierFlags, SyntaxKind} = ts;
+const {factory, ModifierFlags, SyntaxKind} = ts;
 
 import {Log} from '../logging/index.js';
 
@@ -93,7 +93,7 @@ export class Class {
 
   protected get comment() {
     if (!this.deprecated) return this._comment;
-    let deprecated = `@deprecated Use ${this.supersededBy()
+    const deprecated = `@deprecated Use ${this.supersededBy()
       .map(c => c.className())
       .join(' or ')} instead.`;
 
@@ -101,7 +101,7 @@ export class Class {
   }
 
   protected get typedefs(): TypeNode[] {
-    let parents = this.allParents().flatMap(p => p.typedefs);
+    const parents = this.allParents().flatMap(p => p.typedefs);
     return Array.from(
       new Map([...this._typedefs, ...parents].map(t => [JSON.stringify(t), t])),
     )
@@ -154,7 +154,7 @@ export class Class {
 
   constructor(readonly subject: NamedNode) {}
   add(value: Quad, classMap: ClassMap): boolean {
-    let c = GetComment(value);
+    const c = GetComment(value);
     if (c) {
       if (this._comment) {
         Log(
@@ -164,13 +164,13 @@ export class Class {
       this._comment = c.comment;
       return true;
     }
-    let s = GetSubClassOf(value);
+    const s = GetSubClassOf(value);
     if (s) {
       // DataType subclasses rdfs:Class (since it too is a 'meta' type).
       // We don't represent this well right now, but we want to skip it.
       if (IsClassType(s.subClassOf)) return false;
 
-      let parentClass = classMap.get(s.subClassOf.id);
+      const parentClass = classMap.get(s.subClassOf.id);
       if (parentClass) {
         this._parents.push(parentClass);
         parentClass.children.push(this);
@@ -185,7 +185,7 @@ export class Class {
     }
 
     if (IsSupersededBy(value.predicate)) {
-      let supersededBy = classMap.get(value.object.value);
+      const supersededBy = classMap.get(value.object.value);
       if (!supersededBy) {
         throw new Error(
           `Couldn't find class ${value.object.value}, which supersedes class ${this.subject.value}`,
@@ -241,17 +241,17 @@ export class Class {
       return undefined;
     }
 
-    let baseName = this.baseName();
+    const baseName = this.baseName();
     assert(baseName, 'If a baseNode is defined, baseName must be defined.');
 
-    let parentTypes = this.namedParents().map(p =>
+    const parentTypes = this.namedParents().map(p =>
       factory.createExpressionWithTypeArguments(
         factory.createIdentifier(p),
         [],
       ),
     );
 
-    let heritage = factory.createHeritageClause(
+    const heritage = factory.createHeritageClause(
       SyntaxKind.ExtendsKeyword,
       parentTypes.length === 0
         ? [
@@ -268,7 +268,7 @@ export class Class {
         : parentTypes,
     );
 
-    let members = this.properties()
+    const members = this.properties()
       .filter(
         property =>
           !property.deprecated || !properties.skipDeprecatedProperties,
@@ -285,10 +285,10 @@ export class Class {
   }
 
   protected leafDecl(context: Context): DeclarationStatement | undefined {
-    let leafName = this.leafName();
+    const leafName = this.leafName();
     if (!leafName) return undefined;
 
-    let baseName = this.baseName();
+    const baseName = this.baseName();
     // Leaf is missing if !isNodeType || namedParents.length == 0
     // Base is missing if !isNodeType && namedParents.length == 0 && numProps == 0
     //
@@ -313,7 +313,7 @@ export class Class {
 
   protected nonEnumType(skipDeprecated: boolean): TypeNode[] {
     this.children.sort((a, b) => CompareKeys(a.subject, b.subject));
-    let children: TypeNode[] = this.children
+    const children: TypeNode[] = this.children
       .filter(child => !(child.deprecated && skipDeprecated))
       .map(child =>
         factory.createTypeReferenceNode(
@@ -325,8 +325,8 @@ export class Class {
     // A type can have a valid typedef, add that if so.
     children.push(...this.typedefs);
 
-    let upRef = this.leafName() || this.baseName();
-    let typeArgs = this.leafName() ? this.leafTypeArguments() : [];
+    const upRef = this.leafName() || this.baseName();
+    const typeArgs = this.leafName() ? this.leafTypeArguments() : [];
 
     return upRef
       ? [factory.createTypeReferenceNode(upRef, typeArgs), ...children]
@@ -360,11 +360,11 @@ export class Class {
     context: Context,
     properties: {skipDeprecatedProperties: boolean; hasRole: boolean},
   ): readonly Statement[] {
-    let typeValue: TypeNode = this.totalType(
+    const typeValue: TypeNode = this.totalType(
       context,
       properties.skipDeprecatedProperties,
     );
-    let declaration = withComments(
+    const declaration = withComments(
       this.comment,
       factory.createTypeAliasDeclaration(
         factory.createModifiersFromModifierFlags(ModifierFlags.Export),
@@ -413,7 +413,7 @@ export class Builtin extends Class {
 export class AliasBuiltin extends Builtin {
   constructor(subject: NamedNode, ...equivTo: TypeNode[]) {
     super(subject);
-    for (let t of equivTo) this.addTypedef(t);
+    for (const t of equivTo) this.addTypedef(t);
   }
 
   static Alias(equivTo: string): TypeNode {
@@ -464,10 +464,10 @@ export class RoleBuiltin extends Builtin {
   protected typeArguments(
     availableParams: readonly TypeParameterDeclaration[],
   ): TypeNode[] {
-    let hasTContent = !!availableParams.find(
+    const hasTContent = !!availableParams.find(
       param => param.name.text === RoleBuiltin.kContentTypename,
     );
-    let hasTProperty = !!availableParams.find(
+    const hasTProperty = !!availableParams.find(
       param => param.name.text === RoleBuiltin.kPropertyTypename,
     );
 
@@ -485,8 +485,8 @@ export class RoleBuiltin extends Builtin {
   }
 
   protected leafDecl(context: Context): DeclarationStatement {
-    let leafName = this.leafName();
-    let baseName = this.baseName();
+    const leafName = this.leafName();
+    const baseName = this.baseName();
     assert(leafName, 'Role must have Leaf Name');
     assert(baseName, 'Role must have Base Name.');
 
@@ -591,7 +591,7 @@ export function Sort(a: Class, b: Class): number {
 }
 
 function CompareKeys(a: NamedNode, b: NamedNode): number {
-  let byName = (namedPortionOrEmpty(a) || '').localeCompare(
+  const byName = (namedPortionOrEmpty(a) || '').localeCompare(
     namedPortionOrEmpty(b) || '',
   );
   if (byName !== 0) return byName;
