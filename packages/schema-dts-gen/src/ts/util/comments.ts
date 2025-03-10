@@ -16,7 +16,7 @@
 
 import ts from 'typescript';
 import type {Node} from 'typescript';
-var {setSyntheticLeadingComments, SyntaxKind} = ts;
+const {setSyntheticLeadingComments, SyntaxKind} = ts;
 
 import {unified} from 'unified';
 import type {Processor} from 'unified';
@@ -61,9 +61,9 @@ export function appendParagraph(
 }
 
 function parseComment(comment: string): string {
-  var parseAsHtml = shouldParseAsHtml(comment);
-  var commentToParse = unescape(comment);
-  var processor = parseAsHtml
+  const parseAsHtml = shouldParseAsHtml(comment);
+  const commentToParse = unescape(comment);
+  const processor = parseAsHtml
     ? unified().use(html, {fragment: true}).use(stripWhitespace)
     : unified()
         .use(markdown)
@@ -76,9 +76,9 @@ function parseComment(comment: string): string {
         .use(raw)
         .use(stripWhitespace);
 
-  var ast = parseCommentInternal(processor, commentToParse);
+  const ast = parseCommentInternal(processor, commentToParse);
 
-  var context: ParseContext = {
+  const context: ParseContext = {
     result: [],
     onTag: new Map([...universalHandlers, ...htmlHandlers]),
   };
@@ -89,7 +89,7 @@ function parseComment(comment: string): string {
     parent: undefined,
   });
 
-  var lines = context.result.join('').trim().split('\n');
+  const lines = context.result.join('').trim().split('\n');
 
   // Hack to get JSDOCs working. Microsoft does not expose JSDOC-creation API.
   return lines.length === 1
@@ -115,8 +115,8 @@ function parseCommentInternal<
 // without line break tags as a strong indication to use Markdown (even if other
 //  HTML exists). Othrewise, we simply test for the existence of any HTML tag.
 function shouldParseAsHtml(s: string): boolean {
-  var BR = /<br\s*\/?>/gi;
-  var NL = /\n/gi;
+  const BR = /<br\s*\/?>/gi;
+  const NL = /\n/gi;
   if (NL.test(s) && !BR.test(s)) return false;
 
   // Any part of the string that is _not_ escaped in (`) cannot contain HTML in
@@ -124,7 +124,7 @@ function shouldParseAsHtml(s: string): boolean {
   //
   // Similarly, strip all `<code>` blocks entirely. These are somehow still
   // included in Markdown comments.
-  var stripped = s
+  const stripped = s
     .replace(/<code[^<>]*>((?!<\/code>).)*<\/code\s*>/gi, '')
     .replace(/(?!^)(`+)((?!\1).)+\1/g, '');
   return /<[A-Za-z][A-Za-z0-9-]*(\s[^<>]*)?>/g.test(stripped);
@@ -161,22 +161,22 @@ interface FriendlyNode {
 }
 
 // Some handlers for behaviors that apply to multiple tags:
-var em: OnTag = {
+const em: OnTag = {
   open: () => '_',
   close: () => '_',
 };
-var strong: OnTag = {
+const strong: OnTag = {
   open: () => '__',
   close: () => '__',
 };
 
 // Our top-level tag handler.
-var universalHandlers: OnTagBuilder[] = [
+const universalHandlers: OnTagBuilder[] = [
   ['root', {}],
   ['text', {value: v => v}],
 ];
 
-var htmlHandlers: OnTagBuilder[] = [
+const htmlHandlers: OnTagBuilder[] = [
   [
     'p',
     {
@@ -242,7 +242,7 @@ function one(
     parent: FriendlyNode | undefined;
   },
 ): void {
-  var handler = context.onTag.get(getNodeType(node));
+  const handler = context.onTag.get(getNodeType(node));
   if (!handler) {
     throw new Error(
       `While parsing comment: unknown node type (${getNodeType(
@@ -262,9 +262,9 @@ function one(
   }
 
   if ((node as Parent).children) {
-    var p = node as Parent;
+    const p = node as Parent;
     for (let i = 0; i < p.children.length; ++i) {
-      var child = p.children[i];
+      const child = p.children[i];
       one(child, context, {
         isFirstChild: i === 0,
         isLastChild: i === p.children.length - 1,
@@ -288,14 +288,14 @@ function getNodeType(node: AstNode): string {
 
 // String Replacement: make sure we replace unicode strings as needed, wherever
 // they show up as text.
-var replacer: Array<[RegExp, string]> = [
+const replacer: Array<[RegExp, string]> = [
   [/\\?\\n/g, '\n'],
   [/\\?\\u2014/gi, '\u2014'],
   [/\\?\\u2019/gi, '\u2019'],
   [/\\?\\u00A3/gi, '\u00A3'],
 ];
 function unescape(str: string): string {
-  for (var [regexp, replacement] of replacer) {
+  for (const [regexp, replacement] of replacer) {
     str = str.replace(regexp, replacement);
   }
   return str;
