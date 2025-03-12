@@ -40,7 +40,7 @@ describe('load', () => {
   });
 
   it('total fail', async () => {
-    const firstReturn = passThrough();
+    var firstReturn = passThrough();
     get.mockReturnValueOnce(firstReturn);
     firstReturn.destroy(new Error('Bad!!!'));
 
@@ -56,7 +56,7 @@ describe('load', () => {
     beforeEach(async () => {
       get.mockImplementationOnce((_, cb) => {
         // Unfortunately, we use another overload that doesn't appear here.
-        const callback = cb as unknown as (inc: IncomingMessage) => void;
+        var callback = cb as unknown as (inc: IncomingMessage) => void;
         fakeResponse = makeFakeResponse(callback);
 
         return passThrough();
@@ -83,21 +83,21 @@ describe('load', () => {
     });
 
     it('First response fails at error', async () => {
-      const control = fakeResponse(200, 'Ok');
+      var control = fakeResponse(200, 'Ok');
       control.error('So BAD!');
 
       await expect(store).rejects.toThrow('So BAD!');
     });
 
     it('Immediate success (empty)', async () => {
-      const control = fakeResponse(200, 'Ok');
+      var control = fakeResponse(200, 'Ok');
       control.end();
 
       expect((await store).size).toEqual(0);
     });
 
     it('Oneshot', async () => {
-      const control = fakeResponse(200, 'Ok');
+      var control = fakeResponse(200, 'Ok');
       control.data(
         `<https://schema.org/Person> <https://schema.org/knowsAbout> "math" .\n`,
       );
@@ -114,7 +114,7 @@ describe('load', () => {
     });
 
     it('Multiple (clean broken)', async () => {
-      const control = fakeResponse(200, 'Ok');
+      var control = fakeResponse(200, 'Ok');
       control.data(
         `<https://schema.org/Person> <https://schema.org/knowsAbout> "math" .\n`,
       );
@@ -127,7 +127,7 @@ describe('load', () => {
     });
 
     it('Multiple (works with unnamed URL: subject)', async () => {
-      const control = fakeResponse(200, 'Ok');
+      var control = fakeResponse(200, 'Ok');
       control.data(
         `<https://schema.org/Person> <https://schema.org/knowsAbout> "math" .\n`,
       );
@@ -152,7 +152,7 @@ describe('load', () => {
     });
 
     it('Multiple (works with search URL)', async () => {
-      const control = fakeResponse(200, 'Ok');
+      var control = fakeResponse(200, 'Ok');
       control.data(
         `<https://schema.org/Person> <https://schema.org/knowsAbout> "math" .\n`,
       );
@@ -176,7 +176,7 @@ describe('load', () => {
     });
 
     it('Multiple (works with unnamed URL: predicate)', async () => {
-      const control = fakeResponse(200, 'Ok');
+      var control = fakeResponse(200, 'Ok');
       control.data(
         `<https://schema.org/Person> <https://schema.org/knowsAbout> "math" .\n`,
       );
@@ -189,7 +189,7 @@ describe('load', () => {
     });
 
     it('Multiple (dirty broken)', async () => {
-      const control = fakeResponse(200, 'Ok');
+      var control = fakeResponse(200, 'Ok');
       control.data(`<https://schema.org/Person> <https://sc`);
       control.data(
         `hema.org/knowsAbout> "math" .\n<https://schema.org/Person> <https://schema.org/knowsAbout> "science" .\n`,
@@ -211,7 +211,7 @@ describe('load', () => {
     });
 
     it('Skips local files', async () => {
-      const control = fakeResponse(200, 'Ok');
+      var control = fakeResponse(200, 'Ok');
       control.data(`<https://schema.org/Person> <https://sc`);
       control.data(
         `hema.org/knowsAbout> "math" .\n<file:///usr/Person> <https://schema.org/knowsAbout> "science" .\n`,
@@ -223,21 +223,21 @@ describe('load', () => {
 
     describe('.nt syntax errors', () => {
       it('partially missing', async () => {
-        const control = fakeResponse(200, 'Ok');
+        var control = fakeResponse(200, 'Ok');
         control.data(`<https://schema.org/knowsAbout> <https://sc`);
         control.end();
         await expect(store).rejects.toThrow();
       });
 
       it('only two datums', async () => {
-        const control = fakeResponse(200, 'Ok');
+        var control = fakeResponse(200, 'Ok');
         control.data(`<https://schema.org/knowsAbout> <https://sc> .`);
         control.end();
         await expect(store).rejects.toThrow();
       });
 
       it('missing dot', async () => {
-        const control = fakeResponse(200, 'Ok');
+        var control = fakeResponse(200, 'Ok');
         control.data(
           `<https://schema.org/knowsAbout> <https://scema.org/domainIncludes> "a"`,
         );
@@ -246,28 +246,28 @@ describe('load', () => {
       });
 
       it('Non-IRI Subject', async () => {
-        const control = fakeResponse(200, 'Ok');
+        var control = fakeResponse(200, 'Ok');
         control.data(`"knowsAbout" <https://scema.org/domainIncludes> "a" .`);
         control.end();
         await expect(store).rejects.toThrow();
       });
 
       it('Non-IRI Predicate', async () => {
-        const control = fakeResponse(200, 'Ok');
+        var control = fakeResponse(200, 'Ok');
         control.data(`<https://schema.org/knowsAbout> "domainIncludes" "a"`);
         control.end();
         await expect(store).rejects.toThrow();
       });
 
       it('Invalid object', async () => {
-        const control = fakeResponse(200, 'Ok');
+        var control = fakeResponse(200, 'Ok');
         control.data(`<https://schema.org/a> <https://schema.org/b> 'c`);
         control.end();
         await expect(store).rejects.toThrow();
       });
 
       it('Domain only', async () => {
-        const control = fakeResponse(200, 'Ok');
+        var control = fakeResponse(200, 'Ok');
         control.data(`<https://schema.org/> <https://schema.org/b> "c"`);
         control.end();
         await expect(store).rejects.toThrow();
@@ -281,7 +281,7 @@ describe('load', () => {
         // on second call:
         get.mockImplementationOnce((_, cb) => {
           // Unfortunately, we use another overload that doesn't appear here.
-          const callback = cb as unknown as (inc: IncomingMessage) => void;
+          var callback = cb as unknown as (inc: IncomingMessage) => void;
           fakeResponse2 = makeFakeResponse(callback);
 
           return passThrough();
@@ -304,21 +304,21 @@ describe('load', () => {
       });
 
       it('Post Redirect response fails at error', async () => {
-        const control = fakeResponse2(200, 'Ok');
+        var control = fakeResponse2(200, 'Ok');
         control.error('So BAD!');
 
         await expect(store).rejects.toThrow('So BAD!');
       });
 
       it('Post Redirect (empty)', async () => {
-        const control = fakeResponse2(200, 'Ok');
+        var control = fakeResponse2(200, 'Ok');
         control.end();
 
         expect((await store).size).toEqual(0);
       });
 
       it('Post Redirect Oneshot', async () => {
-        const control = fakeResponse2(200, 'Ok');
+        var control = fakeResponse2(200, 'Ok');
         control.data(
           `<https://schema.org/Person> <https://schema.org/knowsAbout> "math" .\n`,
         );
@@ -328,7 +328,7 @@ describe('load', () => {
       });
 
       it('Post Redirect Multiple (clean broken)', async () => {
-        const control = fakeResponse2(200, 'Ok');
+        var control = fakeResponse2(200, 'Ok');
         control.data(
           `<https://schema.org/Person> <https://schema.org/knowsAbout> "math" .\n`,
         );
@@ -341,7 +341,7 @@ describe('load', () => {
       });
 
       it('Post Redirect Multiple (dirty broken)', async () => {
-        const control = fakeResponse2(200, 'Ok');
+        var control = fakeResponse2(200, 'Ok');
         control.data(`<https://schema.org/Person> <https://sc`);
         control.data(
           `hema.org/knowsAbout> "math" .\n<https://schema.org/Person> <https://schema.org/knowsAbout> "science" .\n`,
@@ -354,23 +354,23 @@ describe('load', () => {
     describe('local file', () => {
       let readFileFn: SpiedFunction<(typeof fs)['readFile']>;
       beforeEach(() => {
-        const mockFileLine = `<https://schema.org/Person> <https://schema.org/knowsAbout> <https://schema.org/Event> .\n`;
+        var mockFileLine = `<https://schema.org/Person> <https://schema.org/knowsAbout> <https://schema.org/Event> .\n`;
         readFileFn = jest
           .spyOn(fs, 'readFile')
           .mockImplementation(_ => Promise.resolve(mockFileLine));
       });
       it('fails loading a file (containing .nt syntax errors)', async () => {
-        const failingMockPath = './bad-ontology.nt';
-        const failingMockLine = `<https://schema.org/knowsAbout> <https://sc`;
+        var failingMockPath = './bad-ontology.nt';
+        var failingMockLine = `<https://schema.org/knowsAbout> <https://sc`;
         readFileFn.mockImplementation(_ => Promise.resolve(failingMockLine));
 
-        const fileTriples = loadFile(failingMockPath);
+        var fileTriples = loadFile(failingMockPath);
         await expect(fileTriples).rejects.toThrow('Unexpected');
       });
       it('loads a file from the correct path', async () => {
-        const mockFilePath = './ontology.nt';
+        var mockFilePath = './ontology.nt';
 
-        const fileStore = loadFile(mockFilePath);
+        var fileStore = loadFile(mockFilePath);
 
         expect((await fileStore).getQuads(null, null, null, null)).toEqual([
           new Quad(
@@ -416,8 +416,8 @@ function makeFakeResponse(
       error: (error: Error) => void;
     }
 
-    const cbs: CBs = {} as CBs;
-    const message = {
+    var cbs: CBs = {} as CBs;
+    var message = {
       statusCode,
       statusMessage,
       headers: headers || {},
@@ -429,16 +429,16 @@ function makeFakeResponse(
     } as IncomingMessage;
     callback(message);
 
-    const control = {
+    var control = {
       data(s: string) {
-        const buffer = Buffer.from(s, 'utf-8');
+        var buffer = Buffer.from(s, 'utf-8');
         void flush().then(() => cbs['data'](buffer));
       },
       end() {
         void flush().then(() => cbs['end']());
       },
       error(e: string) {
-        const error = new Error(e);
+        var error = new Error(e);
         void flush().then(() => cbs['error'](error));
       },
     };
