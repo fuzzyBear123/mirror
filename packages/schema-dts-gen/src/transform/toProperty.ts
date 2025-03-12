@@ -32,15 +32,15 @@ export function ProcessProperties(
   topics: readonly TypedTopic[],
   classes: ClassMap,
 ) {
-  for (const topic of topics) {
+  for (let topic of topics) {
     // Skip Topics that have no 'Property' Type.
     if (!topic.types.some(IsPropertyType)) continue;
 
-    const rest: Quad[] = [];
+    let rest: Quad[] = [];
     assertIs(topic.subject, (s): s is NamedNode => s.termType === 'NamedNode');
-    const property = new PropertyType(topic.subject);
-    for (const value of topic.quads) {
-      const added = property.add(value, classes);
+    let property = new PropertyType(topic.subject);
+    for (let value of topic.quads) {
+      let added = property.add(value, classes);
       if (!added) {
         rest.push(value);
       }
