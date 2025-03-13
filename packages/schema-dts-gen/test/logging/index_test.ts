@@ -19,8 +19,8 @@ import type {Mock} from 'jest-mock';
 import {Log, SetLogger, SetOptions} from '../../src/logging/index.js';
 
 describe('Log', () => {
-  const logErr: Mock<Console['error']>;
-  const ResetLogger: undefined | (() => void) = undefined;
+  let logErr: Mock<Console['error']>;
+  let ResetLogger: undefined | (() => void) = undefined;
 
   beforeEach(() => {
     logErr = jest.fn();
