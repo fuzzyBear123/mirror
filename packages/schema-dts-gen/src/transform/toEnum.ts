@@ -31,15 +31,15 @@ import {assertIs} from '../util/assert.js';
  */
 export function ProcessEnums(topics: readonly TypedTopic[], classes: ClassMap) {
   // Process Enums
-  for (let topic of topics) {
+  for (const topic of topics) {
     if (!HasEnumType(topic.types)) continue;
 
     // Everything Here should be an enum.
     assertIs(topic.subject, (s): s is NamedNode => s.termType === 'NamedNode');
-    let enumValue = new EnumValue(topic.subject, topic.types, classes);
+    const enumValue = new EnumValue(topic.subject, topic.types, classes);
 
-    let skipped: Quad[] = [];
-    for (let v of topic.quads) {
+    const skipped: Quad[] = [];
+    for (const v of topic.quads) {
       if (!enumValue.add(v)) skipped.push(v);
     }
 
