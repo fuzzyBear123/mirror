@@ -2,28 +2,28 @@ import {Graph} from '../dist/schema';
 
 // "@context" and "@graph" are both required
 // @ts-expect-error Missing @graph and @context
-let _1: Graph = {};
+const _1: Graph = {};
 
 // @ts-expect-error Missing @context
-let _2: Graph = {'@graph': []};
+const _2: Graph = {'@graph': []};
 
 // @ts-expect-error Missing @graph
-let _3: Graph = {'@context': 'https://schema.org'};
+const _3: Graph = {'@context': 'https://schema.org'};
 
-let _4: Graph = {
+const _4: Graph = {
   '@context': 'https://schema.org',
   '@graph': [],
 };
 
 // "@context" must be correct.
-let _5: Graph = {
+const _5: Graph = {
   // @ts-expect-error Incorrect context
   '@context': 'https://google.com',
   '@graph': [],
 };
 
 // "@graph" can have full objects, and types
-let _6: Graph = {
+const _6: Graph = {
   '@context': 'https://schema.org',
   '@graph': [
     {'@type': 'Thing'},
@@ -33,7 +33,7 @@ let _6: Graph = {
 };
 
 // "@graph" still type-checks
-let _7: Graph = {
+const _7: Graph = {
   '@context': 'https://schema.org',
   '@graph': [
     {
