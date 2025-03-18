@@ -15,7 +15,7 @@
  */
 import ts from 'typescript';
 import type {TypeNode} from 'typescript';
-const {factory} = ts;
+let {factory} = ts;
 
 import {Log} from '../logging/index.js';
 
@@ -38,7 +38,7 @@ export class EnumValue {
     types: readonly NamedNode[],
     map: ClassMap,
   ) {
-    for (const type of types) {
+    for (let type of types) {
       // If a Subject has a "Type", then it either means:
       // 1- Type is Class - This topic represents an object that can be
       //    represented as a class (usually, a node/object).
@@ -65,7 +65,7 @@ export class EnumValue {
       //     being an enum value for some other type (if it has one).
       if (IsClassType(type) || IsDataType(type)) continue;
 
-      const enumObject = map.get(type.id);
+      let enumObject = map.get(type.id);
       if (!enumObject) {
         throw new Error(`Couldn't find ${type.id} in classes.`);
       }
@@ -74,7 +74,7 @@ export class EnumValue {
   }
 
   add(value: Quad) {
-    const comment = GetComment(value);
+    let comment = GetComment(value);
     if (comment) {
       if (this.comment) {
         Log(
@@ -89,13 +89,13 @@ export class EnumValue {
   }
 
   toTypeLiteral(context: Context): TypeNode[] {
-    const types = [this.value.id];
+    let types = [this.value.id];
 
     if (this.value.id.startsWith('http:')) {
       types.push(this.value.id.replace(/^http:/, 'https:'));
     }
 
-    const scoped = context.getScopedName(this.value);
+    let scoped = context.getScopedName(this.value);
     if (scoped !== this.value.id) {
       types.push(scoped);
     }
