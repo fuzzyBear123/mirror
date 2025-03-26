@@ -20,8 +20,8 @@ import ts from 'typescript';
 import {Context} from '../../src/ts/context.js';
 
 function asString(node: ts.Node): string {
-  const printer = ts.createPrinter({newLine: ts.NewLineKind.LineFeed});
-  const source = ts.createSourceFile(
+  let printer = ts.createPrinter({newLine: ts.NewLineKind.LineFeed});
+  let source = ts.createSourceFile(
     'test.ts',
     '',
     ts.ScriptTarget.Latest,
@@ -33,7 +33,7 @@ function asString(node: ts.Node): string {
 
 describe('WithContext generation', () => {
   it('with one item', () => {
-    const ctx = new Context();
+    let ctx = new Context();
     ctx.setUrlContext('https://foo.com');
 
     expect(asString(ctx.contextProperty())).toBe(
@@ -42,7 +42,7 @@ describe('WithContext generation', () => {
   });
 
   it('with named items', () => {
-    const ctx = new Context();
+    let ctx = new Context();
     ctx.addNamedContext('a', 'https://foo.com');
     ctx.addNamedContext('b', 'https://bar.com');
 
@@ -58,14 +58,14 @@ describe('WithContext generation', () => {
 describe('Context.validate', () => {
   it('empty throws', () => {
     expect(() => {
-      const ctx = new Context();
+      let ctx = new Context();
       ctx.validate();
     }).toThrowError('Invalid empty context.');
   });
 
   it('duplicate throws', () => {
     expect(() => {
-      const ctx = new Context();
+      let ctx = new Context();
       ctx.addNamedContext('a', 'foo.com');
       ctx.addNamedContext('a', 'bar.com');
       ctx.validate();
@@ -74,7 +74,7 @@ describe('Context.validate', () => {
 
   it('empty name throws', () => {
     expect(() => {
-      const ctx = new Context();
+      let ctx = new Context();
       ctx.addNamedContext('a', 'foo.com');
       ctx.addNamedContext('', 'bar.com');
       ctx.validate();
@@ -85,7 +85,7 @@ describe('Context.validate', () => {
 
   it('named + default throws', () => {
     expect(() => {
-      const ctx = new Context();
+      let ctx = new Context();
       ctx.setUrlContext('https://schema.org');
       ctx.addNamedContext('eys', 'https://eyas.sh/foo');
       ctx.validate();
@@ -95,7 +95,7 @@ describe('Context.validate', () => {
   });
 
   it('default + name throws', () => {
-    const ctx = new Context();
+    let ctx = new Context();
     ctx.addNamedContext('eys', 'https://eyas.sh/foo');
     expect(() => ctx.setUrlContext('https://schema.org')).toThrowError(
       'Attempting to set a default URL context',
@@ -104,13 +104,13 @@ describe('Context.validate', () => {
 
   it('singular works', () => {
     expect(() => {
-      const ctx = new Context();
+      let ctx = new Context();
       ctx.setUrlContext('https://schema.org');
       ctx.validate();
     }).not.toThrowError();
 
     expect(() => {
-      const ctx = new Context();
+      let ctx = new Context();
       ctx.addNamedContext('sdo', 'https://schema.org');
       ctx.validate();
     }).not.toThrowError();
@@ -118,7 +118,7 @@ describe('Context.validate', () => {
 
   it('multiple can work', () => {
     expect(() => {
-      const ctx = new Context();
+      let ctx = new Context();
       ctx.addNamedContext('sdo', 'https://schema.org');
       ctx.addNamedContext('eys', 'https://eyas.sh/foo');
       ctx.validate();
@@ -128,7 +128,7 @@ describe('Context.validate', () => {
 
 describe('Context.getScopedName', () => {
   it('with single domain URL (https)', () => {
-    const ctx = new Context();
+    let ctx = new Context();
     ctx.setUrlContext('https://schema.org');
 
     expect(ctx.getScopedName(new NamedNode('https://schema.org/Thing'))).toBe(
@@ -153,7 +153,7 @@ describe('Context.getScopedName', () => {
   });
 
   it('with single domain URL (http)', () => {
-    const ctx = new Context();
+    let ctx = new Context();
     ctx.setUrlContext('http://schema.org');
 
     expect(ctx.getScopedName(new NamedNode('http://schema.org/Thing'))).toBe(
@@ -171,7 +171,7 @@ describe('Context.getScopedName', () => {
   });
 
   it('with multiple URLs', () => {
-    const ctx = new Context();
+    let ctx = new Context();
     ctx.addNamedContext('rdf', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#');
     ctx.addNamedContext('rdfs', 'http://www.w3.org/2000/01/rdf-schema#');
     ctx.addNamedContext('schema', 'http://schema.org/');
@@ -201,7 +201,7 @@ describe('Context.getScopedName', () => {
   });
 
   it('with multiple URLs', () => {
-    const ctx = new Context();
+    let ctx = new Context();
     ctx.addNamedContext('rdf', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#');
     ctx.addNamedContext('rdfs', 'http://www.w3.org/2000/01/rdf-schema#');
     ctx.addNamedContext('schema', 'http://schema.org');
@@ -297,7 +297,7 @@ describe('Context.Parse', () => {
 });
 
 function ctx(mutator: (context: Context) => void): Context {
-  const context = new Context();
+  let context = new Context();
   mutator(context);
   return context;
 }
