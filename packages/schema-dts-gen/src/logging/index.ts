@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-let verbose = false;
-let logger = console.error;
+var verbose = false;
+var logger = console.error;
 
 export function SetOptions(options: {verbose: boolean}): void {
   verbose = options.verbose;
