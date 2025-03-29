@@ -32,7 +32,7 @@ describe('PropertyType', () => {
 
   describe('add', () => {
     describe('rangeIncludes', () => {
-      const rangeIncludes = () =>
+      var rangeIncludes = () =>
         new NamedNode('https://schema.org/rangeIncludes');
 
       it('non-type rangeIncludes object fails', () => {
@@ -77,10 +77,10 @@ describe('PropertyType', () => {
   });
 
   describe('domainIncludes', () => {
-    const domainIncludes = () =>
+    var domainIncludes = () =>
       new NamedNode('https://schema.org/domainIncludes');
     it('failed lookup throws', () => {
-      const classes = makeClassMap(makeClass('https://schema.org/Person'));
+      var classes = makeClassMap(makeClass('https://schema.org/Person'));
       expect(() =>
         prop.add(
           new Quad(
@@ -94,7 +94,7 @@ describe('PropertyType', () => {
     });
 
     it('real lookup works', () => {
-      const classes = makeClassMap(makeClass('https://schema.org/Person'));
+      var classes = makeClassMap(makeClass('https://schema.org/Person'));
       expect(
         prop.add(
           new Quad(
@@ -127,7 +127,7 @@ describe('PropertyType', () => {
   });
 
   describe('comment', () => {
-    const comment = () =>
+    var comment = () =>
       new NamedNode('http://www.w3.org/2000/01/rdf-schema#comment');
 
     it('works with string', () => {
