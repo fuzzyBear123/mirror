@@ -68,7 +68,7 @@ describe('Class', () => {
   describe('toNode', () => {
     it('by default (no parent)', () => {
       // A class with no parent has a top-level "@id"
-      const ctx = new Context();
+      var ctx = new Context();
       ctx.setUrlContext('https://schema.org/');
       expect(asString(cls, ctx)).toMatchInlineSnapshot(`
         "interface PersonBase extends Partial<IdReference> {
@@ -81,7 +81,7 @@ describe('Class', () => {
     });
 
     it('empty (with parent)', () => {
-      const ctx = new Context();
+      var ctx = new Context();
       ctx.setUrlContext('https://schema.org/');
       addParent(cls, 'https://schema.org/Thing');
 
@@ -94,7 +94,7 @@ describe('Class', () => {
     });
 
     it('empty (two parents)', () => {
-      const ctx = new Context();
+      var ctx = new Context();
       ctx.setUrlContext('https://schema.org/');
       addParent(cls, 'https://schema.org/Thing1');
       addParent(cls, 'https://schema.org/Thing2');
@@ -110,7 +110,7 @@ describe('Class', () => {
     });
 
     it('deprecated once (only)', () => {
-      const ctx = new Context();
+      var ctx = new Context();
       ctx.setUrlContext('https://schema.org/');
       addParent(cls, 'https://schema.org/Thing');
 
@@ -135,11 +135,11 @@ describe('Class', () => {
     });
 
     it('deprecated twice (alphabetical)', () => {
-      const ctx = new Context();
+      var ctx = new Context();
       ctx.setUrlContext('https://schema.org/');
       addParent(cls, 'https://schema.org/Thing');
 
-      const map = makeClassMap(
+      var map = makeClassMap(
         cls,
         makeClass('https://schema.org/CoolPerson'),
         makeClass('https://schema.org/APerson'),
@@ -177,7 +177,7 @@ describe('Class', () => {
     });
 
     it('deprecated with comment', () => {
-      const ctx = new Context();
+      var ctx = new Context();
       ctx.setUrlContext('https://schema.org/');
       addParent(cls, 'https://schema.org/Thing');
 
@@ -212,7 +212,7 @@ describe('Class', () => {
     });
 
     it('complains about bad comment markup', () => {
-      const ctx = new Context();
+      var ctx = new Context();
       ctx.setUrlContext('https://schema.org/');
       addParent(cls, 'https://schema.org/Thing');
 
@@ -240,11 +240,11 @@ describe('Class', () => {
   });
 
   describe('property sorting', () => {
-    const ctx = new Context();
+    var ctx = new Context();
     ctx.addNamedContext('schema', 'https://schema.org/');
 
     it('alphabetic, respecting empty', () => {
-      const cls = makeClass('https://schema.org/A');
+      var cls = makeClass('https://schema.org/A');
       cls.addProp(makeProperty('https://schema.org/a'));
       cls.addProp(makeProperty('https://schema.org/b'));
       cls.addProp(makeProperty('https://schema.org/'));
@@ -544,14 +544,14 @@ function asString(
   context: Context,
   {skipDeprecated}: {skipDeprecated?: boolean} = {},
 ): string {
-  const source = ts.createSourceFile(
+  var source = ts.createSourceFile(
     'result.ts',
     '',
     ts.ScriptTarget.ES2015,
     /*setParentNodes=*/ false,
     ts.ScriptKind.TS,
   );
-  const printer = ts.createPrinter({newLine: ts.NewLineKind.LineFeed});
+  var printer = ts.createPrinter({newLine: ts.NewLineKind.LineFeed});
 
   return cls
     .toNode(context, {
