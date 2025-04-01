@@ -36,14 +36,14 @@ function cleanName(n: string | null): string | null {
 }
 
 export function namedPortionOrEmpty(term: NamedNode): string {
-  let url = new URL(term.id);
+  const url = new URL(term.id);
   if (url.hash.startsWith('#')) return url.hash.replace(/^#/, '');
-  let path = url.pathname.split('/');
+  const path = url.pathname.split('/');
   return path[path.length - 1];
 }
 
 export function namedPortion(term: NamedNode): string {
-  let name = namedPortionOrEmpty(term);
+  const name = namedPortionOrEmpty(term);
 
   if (!name) {
     throw new Error(
