@@ -22,7 +22,7 @@ import {makeClass, makeClassMap} from '../helpers/make_class.js';
 describe('EnumValue', () => {
   describe('constructor', () => {
     it('Throws when referencing a non-existent type', () => {
-      const map = makeClassMap(
+      let map = makeClassMap(
         makeClass('https://schema.org/Foo'),
         makeClass('https://schema.org/Bar'),
         makeClass('https://schema.org/Baz'),
@@ -38,17 +38,17 @@ describe('EnumValue', () => {
     });
 
     it('Works fine when called for plain enum', () => {
-      const dayOfWeek = makeClass('https://schema.org/DayOfWeek');
-      const addEnum = jest.fn();
+      let dayOfWeek = makeClass('https://schema.org/DayOfWeek');
+      let addEnum = jest.fn();
       dayOfWeek.addEnum = addEnum;
 
-      const map = makeClassMap(
+      let map = makeClassMap(
         makeClass('https://schema.org/Foo'),
         makeClass('https://schema.org/Bar'),
         dayOfWeek,
       );
 
-      const myEnum = new EnumValue(
+      let myEnum = new EnumValue(
         new NamedNode('https://schema.org/Wednesday'),
         [new NamedNode('https://schema.org/DayOfWeek')],
         map,
@@ -58,19 +58,19 @@ describe('EnumValue', () => {
     });
 
     it('Works fine when called for an enum/class', () => {
-      const medicalProcedureType = makeClass(
+      let medicalProcedureType = makeClass(
         'https://schema.org/MedicalProcedureType',
       );
-      const addEnum = jest.fn();
+      let addEnum = jest.fn();
       medicalProcedureType.addEnum = addEnum;
 
-      const map = makeClassMap(
+      let map = makeClassMap(
         makeClass('https://schema.org/Foo'),
         makeClass('https://schema.org/Bar'),
         medicalProcedureType,
       );
 
-      const myEnum = new EnumValue(
+      let myEnum = new EnumValue(
         new NamedNode('https://schema.org/SurgicalProcedure'),
         [
           new NamedNode('https://schema.org/MedicalProcedureType'),
