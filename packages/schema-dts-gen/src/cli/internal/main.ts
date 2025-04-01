@@ -23,11 +23,11 @@ import {Context} from '../../ts/context.js';
 import {ParseFlags} from '../args.js';
 
 export async function main(write: (s: string) => void, args?: string[]) {
-  const options = ParseFlags(args);
+  var options = ParseFlags(args);
   SetOptions(options);
 
-  const ontologyUrl = options.ontology;
-  const filePath = options.file;
+  var ontologyUrl = options.ontology;
+  var filePath = options.file;
   let result: Store;
 
   if (filePath) {
@@ -37,6 +37,6 @@ export async function main(write: (s: string) => void, args?: string[]) {
     Log(`Loading Ontology from URL: ${ontologyUrl}`);
     result = await load(ontologyUrl);
   }
-  const context = Context.Parse(options.context);
+  var context = Context.Parse(options.context);
   await WriteDeclarations(result, options.deprecated, context, write);
 }
