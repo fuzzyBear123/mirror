@@ -29,12 +29,12 @@ export interface Options {
 /* eslint @typescript-eslint/naming-convention: 0 */
 /* eslint camelcase: 0 */
 export function ParseFlags(args?: string[]): Options {
-  let parser = new ArgumentParser({
+  const parser = new ArgumentParser({
     add_help: true,
     description: 'schema-dts generator',
   });
 
-  let verbose = parser.add_mutually_exclusive_group({required: false});
+  const verbose = parser.add_mutually_exclusive_group({required: false});
   verbose.add_argument('--verbose', {
     default: false,
     action: 'store_true',
@@ -85,7 +85,7 @@ export function ParseFlags(args?: string[]): Options {
     dest: 'file',
   });
 
-  let deprecated = parser.add_mutually_exclusive_group({required: false});
+  const deprecated = parser.add_mutually_exclusive_group({required: false});
   deprecated.add_argument('--deprecated', {
     default: true,
     help: 'Include deprecated Classes and Properties.',
