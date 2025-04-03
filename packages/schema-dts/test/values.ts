@@ -1,7 +1,7 @@
 import {Thing} from '../dist/schema';
 
 // Strings & Roles work
-let _1: Thing = {
+const _1: Thing = {
   '@type': 'Person',
   knowsAbout: [
     {'@id': 'A'},
@@ -12,7 +12,7 @@ let _1: Thing = {
 };
 
 // Numbers work
-let _2: Thing = {
+const _2: Thing = {
   '@type': 'Accommodation',
   numberOfBedrooms: 5,
   numberOfBathroomsTotal: '6',
@@ -20,7 +20,7 @@ let _2: Thing = {
 };
 
 // Numbers work in Roles
-let _3: Thing = {
+const _3: Thing = {
   '@type': 'Accommodation',
   numberOfBedrooms: {'@type': 'Role', numberOfBedrooms: 5},
   numberOfBathroomsTotal: {'@type': 'Role', numberOfBathroomsTotal: '6'},
@@ -28,14 +28,14 @@ let _3: Thing = {
 };
 
 // Numbers work in strings
-let _4: Thing = {
+const _4: Thing = {
   '@type': 'Accommodation',
   numberOfBedrooms: [5, '6', '555'],
   numberOfBathroomsTotal: ['6'],
 };
 
 // Numbers must be valid
-let _5: Thing = {
+const _5: Thing = {
   '@type': 'Accommodation',
   numberOfBedrooms: [
     5,
@@ -50,7 +50,7 @@ let _5: Thing = {
 };
 
 // Roles must be valid
-let _6: Thing = {
+const _6: Thing = {
   '@type': 'Person',
   knowsAbout: [
     // @ts-expect-error Invalid role
