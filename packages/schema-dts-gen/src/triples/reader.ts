@@ -29,7 +29,7 @@ function asQuads(data: string): Quad[] {
  * Loads schema all Triples from a given Schema file and version.
  */
 export async function load(url: string): Promise<Store> {
-  let quads = await handleUrl(url);
+  const quads = await handleUrl(url);
   return process(quads);
 }
 
@@ -37,12 +37,12 @@ export async function load(url: string): Promise<Store> {
  * does the same as load(), but for a local file
  */
 export async function loadFile(path: string): Promise<Store> {
-  let quads = await handleFile(path);
+  const quads = await handleFile(path);
   return process(quads);
 }
 
 async function handleFile(path: string): Promise<Quad[]> {
-  let fileStr = await fs.readFile(path, {encoding: 'utf8'});
+  const fileStr = await fs.readFile(path, {encoding: 'utf8'});
   return asQuads(fileStr);
 }
 
@@ -52,7 +52,7 @@ function handleUrl(url: string): Promise<Quad[]> {
       .get(url, response => {
         Log(`Got Response ${response.statusCode}: ${response.statusMessage}.`);
         if (response.statusCode !== 200) {
-          let location =
+          const location =
             response.headers['location'] ||
             response.headers['content-location'];
 
@@ -70,10 +70,10 @@ function handleUrl(url: string): Promise<Quad[]> {
           return;
         }
 
-        let data: string[] = [];
+        const data: string[] = [];
 
         response.on('data', (chunkB: Buffer) => {
-          let chunk = chunkB.toString('utf-8');
+          const chunk = chunkB.toString('utf-8');
           data.push(chunk);
         });
 
@@ -96,7 +96,7 @@ function handleUrl(url: string): Promise<Quad[]> {
 }
 
 export function process(quads: Quad[]): Store {
-  let filtered = quads.filter(quad => {
+  const filtered = quads.filter(quad => {
     if (
       quad.subject.termType === 'NamedNode' &&
       quad.subject.value.includes('file:///')
