@@ -16,7 +16,7 @@
 
 import ts from 'typescript';
 import type {PropertySignature} from 'typescript';
-let {factory, SyntaxKind} = ts;
+const {factory, SyntaxKind} = ts;
 
 import {Log} from '../logging/index.js';
 import {
@@ -48,7 +48,7 @@ export class PropertyType {
 
   get comment() {
     if (!this.deprecated) return this._comment;
-    let deprecated = `@deprecated Consider using ${this._supersededBy
+    const deprecated = `@deprecated Consider using ${this._supersededBy
       .map(o => o.id)
       .join(' or ')} instead.`;
 
@@ -60,7 +60,7 @@ export class PropertyType {
   }
 
   add(value: Quad, classes: ClassMap): boolean {
-    let c = GetComment(value);
+    const c = GetComment(value);
     if (c) {
       if (this._comment) {
         Log(
@@ -81,7 +81,7 @@ export class PropertyType {
           )}.`,
         );
       }
-      let cls = classes.get(value.object.id);
+      const cls = classes.get(value.object.id);
       if (!cls) {
         throw new Error(
           `Could not find class for ${value.object.id} [only foud: ${Array.from(
@@ -94,7 +94,7 @@ export class PropertyType {
     }
 
     if (IsDomainIncludes(value.predicate)) {
-      let cls = classes.get(value.object.id);
+      const cls = classes.get(value.object.id);
       if (!cls) {
         throw new Error(
           `Could not find class for ${
@@ -116,12 +116,12 @@ export class PropertyType {
   }
 
   scalarTypeNode() {
-    let typeNames = this.types.map(cls => cls.className()).sort();
+    const typeNames = this.types.map(cls => cls.className()).sort();
     if (this.types.some(cls => cls.isNodeType())) {
       typeNames.push(IdReferenceName);
     }
 
-    let typeNodes = typeNames.map(type =>
+    const typeNodes = typeNames.map(type =>
       factory.createTypeReferenceNode(type, /*typeArguments=*/ []),
     );
 
