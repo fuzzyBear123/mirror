@@ -26,10 +26,10 @@ export interface TypedTopic extends Topic {
   types: readonly NamedNode[];
 }
 
-let rdfSchemaPrefix = 'http://www.w3.org/2000/01/rdf-schema#';
-let rdfSyntaxPrefix = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#';
-let schemaPrefix = ['http://schema.org/', 'https://schema.org/'] as let;
-let owlPrefix = 'http://www.w3.org/2002/07/owl#';
+const rdfSchemaPrefix = 'http://www.w3.org/2000/01/rdf-schema#';
+const rdfSyntaxPrefix = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#';
+const schemaPrefix = ['http://schema.org/', 'https://schema.org/'] as const;
+const owlPrefix = 'http://www.w3.org/2002/07/owl#';
 
 function possibleTerms(
   prefix: string | readonly string[],
@@ -50,10 +50,10 @@ function debugStr(node: Quad | Term): string {
 }
 
 // Well-known properties
-let Type = new NamedNode(`${rdfSyntaxPrefix}type`);
-let Comment = possibleTerms(rdfSchemaPrefix, 'comment');
-let SubClassOf = possibleTerms(rdfSchemaPrefix, 'subClassOf');
-let DomainIncludes = [
+const Type = new NamedNode(`${rdfSyntaxPrefix}type`);
+const Comment = possibleTerms(rdfSchemaPrefix, 'comment');
+const SubClassOf = possibleTerms(rdfSchemaPrefix, 'subClassOf');
+const DomainIncludes = [
   ...possibleTerms(schemaPrefix, 'domainIncludes'),
   // Technically "domainIncludes" and "domain" have different semantics.
   // domainIncludes is repeated, to include a union of possible types in the
@@ -61,17 +61,17 @@ let DomainIncludes = [
   // possible values, it is used with owl:unionOf and a list literal.
   ...possibleTerms(rdfSchemaPrefix, 'domain'),
 ];
-let RangeIncludes = [
+const RangeIncludes = [
   ...possibleTerms(schemaPrefix, 'rangeIncludes'),
   // See comment on domainIncludes vs domain above.
   ...possibleTerms(rdfSchemaPrefix, 'range'),
 ];
-let SupersededBy = possibleTerms(schemaPrefix, 'supersededBy');
+const SupersededBy = possibleTerms(schemaPrefix, 'supersededBy');
 
 // Well-known classes
-let Class = new NamedNode(`${rdfSchemaPrefix}Class`);
-let Property = new NamedNode(`${rdfSyntaxPrefix}Property`);
-let OWLProperty = possibleTerms(owlPrefix, [
+const Class = new NamedNode(`${rdfSchemaPrefix}Class`);
+const Property = new NamedNode(`${rdfSyntaxPrefix}Property`);
+const OWLProperty = possibleTerms(owlPrefix, [
   'DatatypeProperty',
   'ObjectProperty',
   'FunctionalProperty',
@@ -80,9 +80,9 @@ let OWLProperty = possibleTerms(owlPrefix, [
   'SymmetricProperty',
   'TransitiveProperty',
 ]);
-let OWLClass = possibleTerms(owlPrefix, 'Class');
-let OWLOntology = possibleTerms(owlPrefix, 'Ontology');
-let DataType = possibleTerms(schemaPrefix, 'DataType');
+const OWLClass = possibleTerms(owlPrefix, 'Class');
+const OWLOntology = possibleTerms(owlPrefix, 'Ontology');
+const DataType = possibleTerms(schemaPrefix, 'DataType');
 
 /**
  * If an ObjectPredicate represents a comment, returns the comment. Otherwise
@@ -196,7 +196,7 @@ export function GetType(value: Quad): NamedNode | null {
  * http://www.w3.org/1999/02/22-rdf-syntax-ns#type predicates.
  */
 export function GetTypes(values: readonly Quad[]): readonly NamedNode[] {
-  let types = values.map(GetType).filter((t): t is NamedNode => !!t);
+  const types = values.map(GetType).filter((t): t is NamedNode => !!t);
 
   // Allow empty types. Some custom schema assume "transitive" typing, e.g.
   // gs1 has a TypeCode class which is an rdfs:Class, but its subclasses are
@@ -227,7 +227,7 @@ export function IsPropertyType(type: Term): boolean {
  * its "Type".
  */
 export function HasEnumType(types: readonly NamedNode[]): boolean {
-  for (let type of types) {
+  for (const type of types) {
     // Skip well-known types.
     if (IsClassType(type) || IsPropertyType(type) || IsDataType(type)) continue;
 
