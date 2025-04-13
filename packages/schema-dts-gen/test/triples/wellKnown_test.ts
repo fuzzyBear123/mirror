@@ -227,9 +227,9 @@ describe('wellKnown', () => {
   });
 
   describe('IsDirectlyNamedClass', () => {
-    let cls = new NamedNode('http://www.w3.org/2000/01/rdf-schema#Class');
-    let dataType = new NamedNode('http://schema.org/DataType');
-    let bool = new NamedNode('http://schema.org/Boolean');
+    const cls = new NamedNode('http://www.w3.org/2000/01/rdf-schema#Class');
+    const dataType = new NamedNode('http://schema.org/DataType');
+    const bool = new NamedNode('http://schema.org/Boolean');
 
     it('a data type is a named class', () => {
       expect(
