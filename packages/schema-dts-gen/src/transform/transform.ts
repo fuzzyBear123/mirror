@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import ts from 'typescript';
-let {
+const {
   createPrinter,
   createSourceFile,
   EmitHint,
@@ -53,14 +53,14 @@ export async function WriteDeclarations(
   context: Context,
   write: (content: string) => Promise<void> | void,
 ) {
-  let topics = asTopicArray(graph);
+  const topics = asTopicArray(graph);
 
-  let classes = ProcessClasses(topics);
+  const classes = ProcessClasses(topics);
   ProcessProperties(topics, classes);
   ProcessEnums(topics, classes);
-  let sorted = Array.from(classes.values()).sort(Sort);
+  const sorted = Array.from(classes.values()).sort(Sort);
 
-  let properties = {
+  const properties = {
     hasRole: !!(
       classes.get('http://schema.org/Role') ||
       classes.get('https://schema.org/Role')
@@ -68,26 +68,26 @@ export async function WriteDeclarations(
     skipDeprecatedProperties: !includeDeprecated,
   };
 
-  let source = createSourceFile(
+  const source = createSourceFile(
     'result.ts',
     '',
     ScriptTarget.ES2015,
     /*setParentNodes=*/ false,
     ScriptKind.TS,
   );
-  let printer = createPrinter({newLine: NewLineKind.LineFeed});
+  const printer = createPrinter({newLine: NewLineKind.LineFeed});
 
-  for (let helperType of HelperTypes(context, properties)) {
+  for (const helperType of HelperTypes(context, properties)) {
     await write(printer.printNode(EmitHint.Unspecified, helperType, source));
     await write('\n');
   }
   await write('\n');
 
-  for (let cls of sorted) {
+  for (const cls of sorted) {
     if (cls.deprecated && !includeDeprecated) continue;
 
-    for (let node of cls.toNode(context, properties)) {
-      let result = printer.printNode(EmitHint.Unspecified, node, source);
+    for (const node of cls.toNode(context, properties)) {
+      const result = printer.printNode(EmitHint.Unspecified, node, source);
       await write(result);
       await write('\n');
     }
