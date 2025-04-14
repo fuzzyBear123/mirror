@@ -22,7 +22,7 @@ import {basename} from 'path';
 import {inlineCli} from '../helpers/main_driver.js';
 
 test(`baseline_mixedOWL1_${basename(import.meta.url)}`, async () => {
-  let {actual} = await inlineCli(
+  const {actual} = await inlineCli(
     `
    <http://schema.org/name> <http://schema.org/rangeIncludes> <http://schema.org/Text> .
    <http://schema.org/name> <http://schema.org/domainIncludes> <http://schema.org/Thing> .
@@ -78,7 +78,7 @@ test(`baseline_mixedOWL1_${basename(import.meta.url)}`, async () => {
 });
 
 test(`baseline_mixedOWL2_${basename(import.meta.url)}`, async () => {
-  let {actual} = await inlineCli(
+  const {actual} = await inlineCli(
     `
    <http://schema.org/name> <http://www.w3.org/2000/01/rdf-schema#range> <http://schema.org/Text> .
    <http://schema.org/name> <http://www.w3.org/2000/01/rdf-schema#domain> <http://schema.org/Thing> .
@@ -135,7 +135,7 @@ test(`baseline_mixedOWL2_${basename(import.meta.url)}`, async () => {
 });
 
 test(`baseline_OWLenum_${basename(import.meta.url)}`, async () => {
-  let {actual} = await inlineCli(
+  const {actual} = await inlineCli(
     `
    <http://schema.org/name> <http://www.w3.org/2000/01/rdf-schema#range> <http://schema.org/Text> .
    <http://schema.org/name> <http://www.w3.org/2000/01/rdf-schema#domain> <http://schema.org/Thing> .
