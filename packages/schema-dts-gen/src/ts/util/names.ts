@@ -26,7 +26,7 @@ function decodeOr(component: string) {
 }
 
 export function toClassName(subject: NamedNode): string {
-  const sanitizedName = decodeOr(namedPortion(subject)).replace(
+  let sanitizedName = decodeOr(namedPortion(subject)).replace(
     /[^A-Za-z0-9_]/g,
     '_',
   );
